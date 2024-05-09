@@ -1,6 +1,7 @@
 from model.BestFirstSearch import BestFirstSearch
 from model.BreadthFirstSearch import BreadthFirstSearch
 from model.DepthFirstSearch import DepthFirstSearch
+from model.BidirectionalBestFirstSearch import BidirectionalBestFirstSearch
 
 from model.agent.Problem import Problem 
 
@@ -74,8 +75,8 @@ def main():
     'Iasi': {'Vaslui': 92, 'Neamt': 87},
     'Neamt': {'Iasi' : 87}}
 
-
-  ##Arad2Bucarest = Problem(states, initial, goal, actions, transition_model, cost)
+    Arad2Bucarest = Problem(states, initial, goal, actions, transition_model, cost)
+  
   ##busca = BestFirstSearch(Arad2Bucarest, lambda node: node.path_cost)
   ##print("Best First Search (Arad -> Bucharest):")
   ##node = busca.search()
@@ -84,22 +85,36 @@ def main():
   ##for step in busca.path(node):
   ## print(step.state, step. path_cost)
     
-    Arad2Bucarest = Problem(states, initial, goal, actions, transition_model, cost)
-    busca = BreadthFirstSearch(Arad2Bucarest)
-    print("Breadth-first search (Arad -> Bucharest):")
-    node = busca.search()
-    print(node.state, node.path_cost)
-    print("Solution:")
-    for step in busca.path(node):
-     print(step.state, step. path_cost)
+  ## busca = BreadthFirstSearch(Arad2Bucarest)
+  ## print("Breadth-first search (Arad -> Bucharest):")
+  ## node = busca.search()
+  ## print(node.state, node.path_cost)
+  ## print("Solution:")
+  ## for step in busca.path(node):
+  ##  print(step.state, step. path_cost)
    
-    Arad2Bucarest = Problem(states, initial, goal, actions, transition_model, cost)
-    busca = DepthFirstSearch(Arad2Bucarest)
-    print("Depth-First search (Arad -> Bucharest):")
-    node = busca.search()
-    print(node.state, node.path_cost)
+
+  ## busca = DepthFirstSearch(Arad2Bucarest)
+  ## print("Depth-First search (Arad -> Bucharest):")
+  ## node = busca.search()
+  ## print(node.state, node.path_cost)
+  ## print("Solution:")
+  ## for step in busca.path(node):
+  ##  print(step.state, step. path_cost)
+     
+    print("__________________________")
+    print("Bidirectional search (Arad -> Bucharest):")
+    Bucarest2Arad = Problem(states, goal, initial, actions, transition_model, cost)
+    busca = BidirectionalBestFirstSearch(Arad2Bucarest, lambda node: node.path_cost, 
+                                         Bucarest2Arad, lambda node: node.path_cost)
+    nodes = busca.search()
+    print(nodes[0].state, nodes[0].path_cost, 
+          nodes[1].state, nodes[1].path_cost, nodes[0].path_cost + nodes[1].path_cost)
     print("Solution:")
-    for step in busca.path(node):
-     print(step.state, step. path_cost)
+    for step in busca.path(nodes[0]):
+        print(step.state, step.path_cost)
+    for step in busca.path(nodes[1])[::-1]:
+        print(step.state, step.path_cost)
+
 
 main()
